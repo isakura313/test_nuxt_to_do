@@ -23,11 +23,14 @@ import RocketIcon from "~/components/icons/RocketIcon.vue";
   display: flex;
   width: 230px;
   justify-content: space-between;
+  align-items: center;
 }
 
 .header__title {
   color: #4EA8DE;
   font-size: 40px;
+  font-family: Inter, serif;
+  font-weight: 900;
 
   &_blue {
     color: #5E60CE;
