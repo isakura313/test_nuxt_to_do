@@ -17,6 +17,7 @@ import RocketIcon from "~/components/icons/RocketIcon.vue";
   display: flex;
   justify-content: center;
   padding: 2em;
+  width: 100%;
 }
 
 .nav {
