@@ -1,9 +1,12 @@
 <template>
     <div class="app_wrapper">
         <Header/>
-        <CreateButton @click.native="showModal = true"/>
-        <ModalCreate :open="showModal"/>
+        <ModalCreate :open="showModal" @closeModal="showModal=false"/>
         <div class="todo_list__wrapper">
+            <CreateButton @click.native="showModal = true"
+
+                          style="width: 56%;
+                        margin-top: -1.78%;"/>
             <TodoList/>
         </div>
     </div>
@@ -26,7 +29,11 @@ const showModal = ref(false)
 
 .todo_list__wrapper {
   background-color: #1A1A1A;
+  min-height: 90vh;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 

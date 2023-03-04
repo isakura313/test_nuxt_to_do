@@ -16,7 +16,7 @@ import RocketIcon from "~/components/icons/RocketIcon.vue";
   background-color: #0D0D0D;
   display: flex;
   justify-content: center;
-  padding: 2em;
+  padding: 4em;
   width: 100%;
 }
 

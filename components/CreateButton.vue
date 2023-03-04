@@ -1,5 +1,9 @@
 <template>
-    <button class="create_button" @mouseover='iconColor = "#808080"' @mouseleave='iconColor = "#F2F2F2"'>
+    <button
+            class="create_button"
+            @mouseover='iconColor = "#808080"'
+            @mouseleave='iconColor = "#F2F2F2"'
+    >
         <span class="create_button__text">Создать</span>
         <div class="create_button__icon">
             <PlusIcon :color="iconColor"/>
@@ -10,7 +14,6 @@
 <script lang="ts" setup>
 import {ref} from 'vue';
 import PlusIcon from "~/components/icons/PlusIcon.vue";
-
 const iconColor = ref('#F2F2F2')
 
 </script>
@@ -23,10 +26,7 @@ const iconColor = ref('#F2F2F2')
   font-size: 14px;
   font-weight: 700;
   line-height: 1.6;
-  top: 15%;
   padding: 16px;
-  width: 54%;
-  position: absolute;
   border: none;
   border-radius: 8px;
   color: #F2F2F2;
