@@ -12,9 +12,6 @@ export const useTodoStore = defineStore("todo", {
     // getTodos: (state) => state.todos
   },
   actions: {
-    closeModal() {
-      this.showModal = false;
-    },
     getTodos() {
       axios({
         method: "GET",
@@ -42,6 +39,23 @@ export const useTodoStore = defineStore("todo", {
         .catch((e) => {
           this.error = true;
         });
+    },
+    editTodo(todo: any) {
+      axios({
+        method: "PATCH",
+        url: `${url}/${todo.id}`,
+        data: {
+          ...todo
+        },
+      }).then((res: any) => {
+        this.todos = this.todos.map((item) => {
+          if(item.id === todo.id){
+            item=res.data;
+            return item
+          }
+          return item
+        })
+      });
     },
     toggleDone(todo: TodoInterface) {
       axios({

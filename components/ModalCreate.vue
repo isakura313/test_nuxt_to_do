@@ -29,6 +29,7 @@
           />
           <CreateButton
             @click.prevent="createTodo"
+            :text="editableMode ? 'сохранить' : 'создать'"
             style="width: 100%; background-color: #808080"
           />
         </form>
@@ -65,6 +66,16 @@ function createTodo() {
     header_error.value = true;
     return;
   }
+  if (props.editableMode) {
+    store.editTodo({
+      id: props.todoId,
+      header: header.value,
+      text: text.value,
+      date_expired: String(new Date().toISOString()),
+    });
+    $emits("closeModal");
+    return;
+  }
   store.addTodos({
     header: header.value,
     text: text.value,
@@ -92,7 +103,6 @@ const props = defineProps({
   },
 });
 if (props.editableMode && store.todos.length) {
-  // alert("editable");
   console.log(props.todoId);
   console.log(store.todos);
   const todo: TodoInterface = store.todos.filter((item) => item.id == props.todoId)[0];

@@ -1,35 +1,38 @@
 <template>
-    <button
-            class="create_button"
-            @mouseover='iconColor = "#808080"'
-            @mouseleave='iconColor = "#F2F2F2"'
-    >
-        <span class="create_button__text">Создать</span>
-        <div class="create_button__icon">
-            <PlusIcon :color="iconColor"/>
-        </div>
-    </button>
+  <button
+    class="create_button"
+    @mouseover="iconColor = '#808080'"
+    @mouseleave="iconColor = '#F2F2F2'"
+  >
+    <span class="create_button__text">{{ text }}</span>
+    <div class="create_button__icon">
+      <PlusIcon :color="iconColor" />
+    </div>
+  </button>
 </template>
 
 <script lang="ts" setup>
-import {ref} from 'vue';
+import { ref } from "vue";
 import PlusIcon from "~/components/icons/PlusIcon.vue";
-const iconColor = ref('#F2F2F2')
-
+const iconColor = ref("#F2F2F2");
+const props = defineProps({
+  text: {
+    type: String,
+  },
+});
 </script>
-
 
 <style lang="scss">
 .create_button {
-  background-color: #1E6F9F;
-  font-family: Inter, 'serif';
+  background-color: #1e6f9f;
+  font-family: Inter, "serif";
   font-size: 14px;
   font-weight: 700;
   line-height: 1.6;
   padding: 16px;
   border: none;
   border-radius: 8px;
-  color: #F2F2F2;
+  color: #f2f2f2;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -47,6 +50,5 @@ const iconColor = ref('#F2F2F2')
     cursor: pointer;
     color: #808080;
   }
-
 }
 </style>
