@@ -6,7 +6,7 @@ export interface TodoInterface {
     header: string,
     text: string,
     done: Boolean,
-    date_created: string,
+    created_at: string,
     date_expired: string,
 
 }
