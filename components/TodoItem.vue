@@ -1,42 +1,44 @@
 <template>
-  <div class="todo_item">
-    <div class="todo_item__wrap">
-      <div
-        :class="{ todo_item__icon_wrap: true, todo_icon_selected: todo.done }"
-        @click="madeDone"
-      >
-        <IconCompleted v-if="todo.done" />
-      </div>
-      <div class="top_wrap">
-        <h5 :class="{ todo_item__title: true, strike_text: todo.done }">
-          {{ todo.header }}
-        </h5>
-        <div style="display: flex">
-          <div class="todo_item__wrap_dates">
-            <div class="todo_item__dates_wrap">
-              <span>Дата создания:</span>
-              <span class="todo_item__date"> {{ filterDate(todo.created_at) }}</span>
+    <div class="todo_item">
+        <div class="todo_item__wrap">
+            <div
+                    :class="{ todo_item__icon_wrap: true, todo_icon_selected: todo.done }"
+                    @click="madeDone"
+            >
+                <IconCompleted v-if="todo.done"/>
             </div>
-            <div class="todo_item__dates_wrap">
-              <span>Дата окончания: </span>
-              <span class="todo_item__date"> {{ filterDate(todo.date_expired) }}</span>
+            <div class="top_wrap">
+                <NuxtLink :to="'todo/'+todo.id">
+                    <h5 :class="{ todo_item__title: true, strike_text: todo.done }">
+                        {{ todo.header }}
+                    </h5>
+                </NuxtLink>
+                <div style="display: flex">
+                    <div class="todo_item__wrap_dates">
+                        <div class="todo_item__dates_wrap">
+                            <span>Дата создания:</span>
+                            <span class="todo_item__date"> {{ filterDate(todo.created_at) }}</span>
+                        </div>
+                        <div class="todo_item__dates_wrap">
+                            <span>Дата окончания: </span>
+                            <span class="todo_item__date"> {{ filterDate(todo.date_expired) }}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
+            <div class="todo_item__wrap_icons">
+                <EditIcon class="todo_item__icon_edit" @click="editTodo"/>
+                <ThrashIcon class="todo_item__icon_edit" @click="deleteTodo"/>
+            </div>
+            <p :class="{ todo_item__text: true, strike_text: todo.done }">{{ todo.text }}</p>
         </div>
-      </div>
-      <div class="todo_item__wrap_icons">
-        <EditIcon class="todo_item__icon_edit" @click="editTodo" />
-        <ThrashIcon class="todo_item__icon_edit" @click="deleteTodo" />
-      </div>
-      <p :class="{ todo_item__text: true, strike_text: todo.done }">{{ todo.text }}</p>
-    </div>
 
-  </div>
-  <ModalCreate
-      :editableMode="true"
-      :todoId="todo.id"
-      :open="openModal"
-      @closeModal="closeModal"
+    </div>
+    <ModalCreate
+            :editableMode="true"
+            :todoId="todo.id"
+            :open="openModal"
+            @closeModal="closeModal"
     />
 </template>
 
@@ -45,42 +47,43 @@ import IconCompleted from "./icons/IconСompleted.vue";
 import EditIcon from "~/components/icons/EditIcon.vue";
 import ThrashIcon from "~/components/icons/ThrashIcon.vue";
 import ModalCreate from "./ModalCreate.vue";
-import { TodoInterface } from "~/types/todoInterface";
-import { zeroDateFix } from "~/helpers/zeroDateFix";
-import { useTodoStore } from "~/store";
+import {TodoInterface} from "~/types/todoInterface";
+import {zeroDateFix} from "~/helpers/zeroDateFix";
+import {useTodoStore} from "~/store";
 
 const activeIconClass = ref("todo_icon_unselected");
 const openModal = ref(false);
 const store = useTodoStore();
 const props = defineProps<{
-  todo: TodoInterface;
+    todo: TodoInterface;
 }>();
 
 function filterDate(date: any) {
-  const newDate = new Date(date);
-  return `${zeroDateFix(newDate.getDate())}:${zeroDateFix(
-    newDate.getMonth()
-  )}:${newDate.getFullYear()}`;
+    const newDate = new Date(date);
+    return `${zeroDateFix(newDate.getDate())}:${zeroDateFix(
+        newDate.getMonth()
+    )}:${newDate.getFullYear()}`;
 }
 
 function closeModal() {
-  openModal.value = false;
+    openModal.value = false;
 }
 
 function madeDone() {
-  store.toggleDone(props.todo);
-  activeIconClass.value === "todo_icon_selected"
-    ? (activeIconClass.value = "todo_icon_unselected")
-    : (activeIconClass.value = "todo_icon_selected");
+    store.toggleDone(props.todo);
+    activeIconClass.value === "todo_icon_selected"
+        ? (activeIconClass.value = "todo_icon_unselected")
+        : (activeIconClass.value = "todo_icon_selected");
 }
+
 function editTodo() {
-  openModal.value = true;
+    openModal.value = true;
 }
 
 function deleteTodo() {
-  if (props.todo.id) {
-    store.deleteTodos(props.todo.id);
-  }
+    if (props.todo.id) {
+        store.deleteTodos(props.todo.id);
+    }
 }
 </script>
 
@@ -89,9 +92,11 @@ function deleteTodo() {
   display: flex;
   justify-content: space-between;
 }
+
 .strike_text {
   text-decoration: line-through;
 }
+
 .todo_item {
   border: 1px solid #333333;
   margin-bottom: 12px;
@@ -146,6 +151,7 @@ function deleteTodo() {
   &__dates_wrap {
     display: flex;
     justify-content: space-between;
+    line-height: 20px;
   }
 
   &__date {
@@ -157,6 +163,7 @@ function deleteTodo() {
     justify-content: space-evenly;
     width: 77px;
   }
+
   &__icon_edit {
     &:hover {
       cursor: pointer;
