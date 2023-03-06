@@ -7,8 +7,15 @@
             <p class="todo_item_page__p">{{ todo_item.text }}</p>
         </div>
         <div class="todo_item_page__dates_wrap">
-            <span class="todo_item_page__date">{{ todo_item.created_at }}</span>
-            <span class="todo_item_page__date">{{ todo_item.expired_at }}</span>
+            <div class="date_wrap">
+                <span>Дата создания</span>
+                <span class="todo_item_page__date">{{ filterDate(todo_item.created_at) }}</span>
+            </div>
+            <div class="date_wrap">
+                <span>Дата окончания</span> <span class="todo_item_page__date">{{
+                filterDate(todo_item.date_expired)
+                }}</span>
+            </div>
         </div>
     </div>
 </template>
@@ -16,16 +23,17 @@
 
 <script lang="ts" setup>
 import {useTodoStore} from '~/store'
-import {todoInterface, TodoInterface} from "~/types/todoInterface";
+import {TodoInterface} from "~/types/todoInterface";
 import {ref, computed} from 'vue';
+import filterDate from "~/helpers/formatDate";
 
 
 const route = useRoute();
 const store = useTodoStore()
 store.getTodos()
 
-const todo_item: todoInterface | null = computed(() => {
-    return store.todos.filter((item) => item.id === route.params.id)[0] || null
+const todo_item = computed<TodoInterface>((): TodoInterface => {
+    return store.todos.filter((item) => item.id === route.params.id)[0]
 })
 
 </script>

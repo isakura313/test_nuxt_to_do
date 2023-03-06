@@ -1,6 +1,7 @@
-import { TodoInterface } from "~/types/todoInterface";
+import {TodoInterface} from "~/types/todoInterface";
 
 export type RootState = {
-  todos: Array<TodoInterface>;
-  error: Boolean;
+    todos: Array<TodoInterface>;
+    loadingTodo: Boolean,
+    error: Boolean;
 };

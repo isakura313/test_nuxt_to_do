@@ -48,8 +48,8 @@ import EditIcon from "~/components/icons/EditIcon.vue";
 import ThrashIcon from "~/components/icons/ThrashIcon.vue";
 import ModalCreate from "./ModalCreate.vue";
 import {TodoInterface} from "~/types/todoInterface";
-import {zeroDateFix} from "~/helpers/zeroDateFix";
 import {useTodoStore} from "~/store";
+import filterDate from "~/helpers/formatDate";
 
 const activeIconClass = ref("todo_icon_unselected");
 const openModal = ref(false);
@@ -57,13 +57,6 @@ const store = useTodoStore();
 const props = defineProps<{
     todo: TodoInterface;
 }>();
-
-function filterDate(date: any) {
-    const newDate = new Date(date);
-    return `${zeroDateFix(newDate.getDate())}:${zeroDateFix(
-        newDate.getMonth()
-    )}:${newDate.getFullYear()}`;
-}
 
 function closeModal() {
     openModal.value = false;
@@ -136,6 +129,7 @@ function deleteTodo() {
     font-size: 20px;
     line-height: 140%;
     color: #ffffff;
+    text-decoration: none;
   }
 
   &__text {

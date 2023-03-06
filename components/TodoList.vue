@@ -18,20 +18,22 @@
                     </span>
         </div>
     </div>
+
     <div class="todo_list_wrapper" v-if="store.todos.length">
         <TodoItem v-for="todo in store.todos" :todo="todo" :key="todo.id"/>
     </div>
-    <div class="todo_list_empty" v-else>
+    <div class="todo_list_empty" v-else-if="store.todos.length === 0 && store.loadingTodo ">
         <Clipboard/>
         <h5 class="todo_list_empty__h5">У Вас еще нет созданных задач</h5>
         <p class="todo_list_empty__p">Создавайте задачи и организуйте свои дела</p>
     </div>
+    <Loader v-else/>
+
 </template>
 
 <script lang="ts" setup>
 import Clipboard from "~/components/icons/Clipboard.vue";
-import {ref} from 'vue';
-import type {Ref} from 'vue';
+import Loader from '~/components/Loader.vue'
 
 import {useTodoStore} from '~/store'
 import TodoItem from "~/components/TodoItem.vue";
@@ -54,7 +56,7 @@ const store = useTodoStore();
   }
 
   &__span_blue {
-    font-family: 'Inter';
+    font-family: 'Inter', 'sans-serif';
     font-weight: 700;
     font-size: 14px;
     line-height: 17px;
@@ -63,7 +65,7 @@ const store = useTodoStore();
   }
 
   &__span_purple {
-    font-family: 'Inter';
+    font-family: 'Inter', 'sans-serif';
     font-style: normal;
     font-weight: 700;
     font-size: 14px;
@@ -78,12 +80,12 @@ const store = useTodoStore();
     justify-content: center;
     align-items: center;
     padding: 2px 8px;
-    font-family: 'Inter';
+    font-family: 'Inter', 'sans-serif';
     font-weight: 700;
     font-size: 12px;
     line-height: 15px;
     height: 19px;
-    background: #333333;
+    background-color: #333333;
     border-radius: 999px;
   }
 }
