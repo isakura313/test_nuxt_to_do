@@ -8,7 +8,7 @@
                 <IconCompleted v-if="todo.done"/>
             </div>
             <div class="top_wrap">
-                <NuxtLink :to="'todo/'+todo.id">
+                <NuxtLink :to="'todo/'+todo.id" style="text-decoration: none">
                     <h5 :class="{ todo_item__title: true, strike_text: todo.done }">
                         {{ todo.header }}
                     </h5>
@@ -129,7 +129,6 @@ function deleteTodo() {
     font-size: 20px;
     line-height: 140%;
     color: #ffffff;
-    text-decoration: none;
   }
 
   &__text {

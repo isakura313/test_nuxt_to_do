@@ -29,12 +29,17 @@
                         />
                         <div class="modal_form__error_valid">{{ error_message_text }}</div>
                     </div>
-                    <input
-                            v-model="date_expired"
-                            type="date"
-                            placeholder="Дата окончания"
-                            class="modal_form__input"
-                    />
+                    <div class="modal_form__input_wrap">
+                        <input
+                                v-maska:[options]
+                                v-model="date_expired"
+                                type="text"
+                                placeholder="Дата окончания"
+                                class="modal_form__input"
+                        />
+                        <div class="modal_form__error_valid">{{ error_message_date }}</div>
+                    </div>
+
                     <CreateButton
                             @click.prevent="createTodo"
                             :text="editableMode ? 'сохранить' : 'создать'"
@@ -47,17 +52,21 @@
 </template>
 
 <script lang="ts" setup>
-import {defineEmits} from "vue";
+import {defineEmits, watch} from "vue";
+import {vMaska} from "maska"
 import CloseIcon from "~/components/icons/CloseIcon.vue";
 import CreateButton from "~/components/CreateButton.vue";
 import {useTodoStore} from "~/store";
 import {TodoInterface} from "~~/types/todoInterface";
+import is from "@sindresorhus/is";
+import date = is.date;
 
 const header = ref("");
 const text = ref("");
-const date_expired = ref("0");
+let date_expired = ref(0);
 const error_message_header = ref('')
 const error_message_text = ref('')
+const error_message_date = ref('')
 const header_error = ref(false);
 const text_error = ref(false);
 const date_error = ref(false);
@@ -69,14 +78,56 @@ function checkHeader() {
     if (header.value.length < 4) {
         header_error.value = true
         error_message_header.value = 'Это поле обязательно'
+        return;
     }
+    header_error.value = false
+    error_message_header.value = ''
 }
+
+const options = reactive({
+    mask: "##.##.####",
+    eager: true
+})
+watch(date_expired, () => {
+    const arr = date_expired.value.split('.');
+    if (arr[0] > 31) {
+        arr[0] = 31
+    }
+    if (arr[1] > 12) {
+        arr[1] = 12
+    }
+    if (arr[2] > Number(new Date().getFullYear())) {
+        arr[2] = new Date().getFullYear()
+    }
+    date_expired.value = arr.join('.')
+})
+
+// date_expired.value = e.target.value
+// console.log(/^\d+$/.test(e.target.value));
+// if (/^\d+$/.test(e.target.value)) {
+//     const arr = e.target.value.split(".")
+//     if (arr[0] > 31) {
+//         arr[0] = 31
+//     }
+//     if (arr[1] > 13) {
+//         arr[1] = 12
+//     }
+//     if (arr[2] > Number(new Date().getFullYear())) {
+//         arr[2] = Number(new Date().getFullYear())
+//     }
+//     date_expired.value = arr.join('.')
+// }
+// }
+
 
 function checkText() {
     if (text.value.length < 4) {
         text_error.value = true
         error_message_text.value = 'Это поле обязательно'
+        return
     }
+    header_error.value = false
+    error_message_header.value = ''
 }
 
 function createTodo() {
@@ -95,6 +146,8 @@ function createTodo() {
             text: text.value,
             date_expired: String(new Date().toISOString()),
         });
+        header.value = ''
+        text.value = ''
         $emits("closeModal");
         return;
     }
