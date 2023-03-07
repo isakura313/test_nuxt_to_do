@@ -8,13 +8,13 @@
         </div>
         <div class="todo_item_page__dates_wrap">
             <div class="date_wrap">
-                <span>Дата создания</span>
-                <span class="todo_item_page__date">{{ filterDate(todo_item.created_at) }}</span>
+                <span>Дата создания:</span>
+                <span class="todo_item_page__date">{{ todo_item.created_at }}</span>
             </div>
             <div class="date_wrap">
-                <span>Дата окончания</span> <span class="todo_item_page__date">{{
-                filterDate(todo_item.date_expired)
-                }}</span>
+                <span>Дата окончания:</span>
+                <span class="todo_item_page__date">
+                    {{ todo_item.date_expired }}</span>
             </div>
         </div>
     </div>
@@ -22,18 +22,18 @@
 
 
 <script lang="ts" setup>
-import {useTodoStore} from '~/store'
 import {TodoInterface} from "~/types/todoInterface";
 import {ref, computed} from 'vue';
-import filterDate from "~/helpers/formatDate";
 
+import type Ref from 'vue'
 
+const todo_item: Ref<TodoInterface | unknown> = ref(null)
 const route = useRoute();
-const store = useTodoStore()
-store.getTodos()
+const { data:todo }  = await useFetch(`https://64037721302b5d671c502ee9.mockapi.io/api/deals/${route.params.id}`)
+todo_item.value = todo.value
 
-const todo_item = computed<TodoInterface>((): TodoInterface => {
-    return store.todos.filter((item) => item.id === route.params.id)[0]
+useHead({
+    title: todo.value?.header,
 })
 
 </script>
@@ -44,11 +44,12 @@ const todo_item = computed<TodoInterface>((): TodoInterface => {
   width: 44.5rem;
 
   &__h3 {
-    font-family: 'Inter';
+    font-family: 'Inter', 'sans-serif';
     font-weight: 400;
     font-size: 14px;
     line-height: 17px;
     color: #808080;
+    margin-bottom: 8px;
   }
 
   &__wrap {
@@ -73,6 +74,17 @@ const todo_item = computed<TodoInterface>((): TodoInterface => {
     color: #F2F2F2;
   }
 
+  &__date {
+    color: #4EA8DE;
+  }
+
+  .date_wrap {
+    margin-top: 8px;
+    color: #808080;
+    display: flex;
+    justify-content: space-between;
+    width: 12em;
+  }
 
 }
 </style>

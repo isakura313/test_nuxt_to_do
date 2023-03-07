@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
     css: ["@/assets/styles/main.sass"],
     modules: ['@pinia/nuxt'],
+    ssr: true,
     nitro: {
         devProxy: {
             "/api": {

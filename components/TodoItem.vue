@@ -17,11 +17,11 @@
                     <div class="todo_item__wrap_dates">
                         <div class="todo_item__dates_wrap">
                             <span>Дата создания:</span>
-                            <span class="todo_item__date"> {{ filterDate(todo.created_at) }}</span>
+                            <span class="todo_item__date"> {{ todo.created_at}}</span>
                         </div>
                         <div class="todo_item__dates_wrap">
                             <span>Дата окончания: </span>
-                            <span class="todo_item__date"> {{ filterDate(todo.date_expired) }}</span>
+                            <span class="todo_item__date"> {{ todo.date_expired }}</span>
                         </div>
                     </div>
                 </div>

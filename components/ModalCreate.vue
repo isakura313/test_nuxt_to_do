@@ -23,7 +23,7 @@
                         <input
                                 v-model="text"
                                 type="text"
-                                placeholder="text"
+                                placeholder="Текст"
                                 class="modal_form__input"
                                 @blur="checkText"
                         />
@@ -45,9 +45,12 @@
                     <CreateButton
                             @click.prevent="createTodo"
                             :text="editableMode ? 'сохранить' : 'создать'"
-                            style="width: 100%; background-color: #808080"
+                            style="width: 100%;"
+                            :disabled="button_disabled"
                     />
-                    <VueDatePicker v-model="date_expired" inline v-show="show_calendar"/>
+                    <VueDatePicker dark @update:model-value="setDate" vertical inline
+                                   v-show="show_calendar"
+                                   style="position: absolute; bottom:0%;left: 63%;"/>
                 </form>
             </div>
         </div>
@@ -68,13 +71,10 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import CalendarIcon from "~/components/icons/CalendarIcon.vue";
 
 const header = ref("");
-const date = ref();
 const show_calendar = ref(false);
 
 const text = ref("");
-let date_expired: Ref<string> = ref(`${zeroDateFix(new Date().getDate())}
-    .${zeroDateFix(new Date().getMonth())}
-    .${new Date().getFullYear()}`);
+let date_expired: Ref<string> = ref(``);
 
 const error_message_header = ref('')
 const error_message_text = ref('')
@@ -87,6 +87,18 @@ const store = useTodoStore();
 const $emits = defineEmits(["closeModal"]);
 
 function toggleCalendar() {
+    show_calendar.value = !show_calendar.value;
+}
+
+const button_disabled = computed(() => {
+    return !(header.value.length > 4 && text.value.length > 4 && date_expired.value.length > 9)
+})
+
+const setDate = (value: any) => {
+    console.log(value)
+    const new_date = new Date(value);
+    date_expired.value = `${zeroDateFix(new Date(new_date).getDate())}.${zeroDateFix(new Date(new_date).getMonth() + 1)}
+.${new Date(new_date).getFullYear()}`
     show_calendar.value = !show_calendar.value;
 }
 
@@ -126,8 +138,8 @@ function checkText() {
         error_message_text.value = 'Это поле обязательно'
         return
     }
-    header_error.value = false
-    error_message_header.value = ''
+    text_error.value = false
+    error_message_text.value = ''
 }
 
 function createTodo() {
@@ -144,20 +156,24 @@ function createTodo() {
             id: props.todoId,
             header: header.value,
             text: text.value,
-            date_expired: String(new Date().toISOString()),
+            date_expired: date_expired.value,
         });
         header.value = ''
         text.value = ''
+        date_expired.value = ''
         $emits("closeModal");
         return;
     }
     store.addTodos({
         header: header.value,
         text: text.value,
-        created_at: String(new Date().toISOString()),
-        date_expired: String(new Date().toISOString()),
+        created_at: `${zeroDateFix(new Date().getDate())}.${zeroDateFix(new Date().getMonth() + 1)}.${new Date().getFullYear()}`,
+        date_expired: date_expired.value,
         done: false,
     });
+    header.value = ''
+    text.value = ''
+    date_expired.value = ''
     $emits("closeModal");
 }
 
@@ -190,10 +206,39 @@ if (props.editableMode && store.todos.length) {
 </script>
 
 <style lang="scss">
+.dp__theme_dark {
+  --dp-background-color: #1E1E1E;
+  --dp-border-radius: 5px;
+}
+
+.dp__cell_inner {
+  border-radius: 50% !important
+}
+
+.dp__active_date {
+  background-color: #8284FA;
+}
+
+.dp__button {
+  display: none;
+}
+
+.dp__selection_preview {
+  display: none;
+}
+
+.dp__action_buttons {
+  width: 100%;
+}
+
+.dp__select {
+  color: #8284FA;
+}
+
 .modal_wrapper {
   width: 100%;
-  height: 100vh;
-  position: absolute;
+  min-height: 100vh;
+  position: fixed;
   background: rgba(0, 0, 0, 0.5);
   z-index: 1;
   top: 0;
@@ -201,9 +246,12 @@ if (props.editableMode && store.todos.length) {
 
 .modal {
   width: 28rem;
-  margin: 16rem auto 0 auto;
+  margin: 14rem auto 0 auto;
   background-color: #333333;
   padding: 20px;
+  height: 100%;
+  border: 1px solid #262626;
+  border-radius: 10px;
 
   &_form__error_valid {
     font-family: 'Inter', 'sans-serif';

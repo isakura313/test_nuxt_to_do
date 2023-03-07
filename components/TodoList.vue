@@ -14,8 +14,8 @@
                 Выполнено
             </span>
             <span class="todo_list_top_header__counter">
-                        {{ store.doneTodos }} из {{ store.todos.length }}
-                    </span>
+                {{ store.doneTodos }} из {{ store.todos.length }}
+            </span>
         </div>
     </div>
 
@@ -23,18 +23,18 @@
         <TodoItem v-for="todo in store.todos" :todo="todo" :key="todo.id"/>
     </div>
     <div class="todo_list_empty" v-else-if="store.todos.length === 0 && store.loadingTodo ">
-        <Clipboard/>
+        <div class="todo_list_empty__line">
+        </div>
+        <Clipboard style="margin-bottom: 16px"/>
         <h5 class="todo_list_empty__h5">У Вас еще нет созданных задач</h5>
         <p class="todo_list_empty__p">Создавайте задачи и организуйте свои дела</p>
     </div>
     <Loader v-else/>
-
 </template>
 
 <script lang="ts" setup>
 import Clipboard from "~/components/icons/Clipboard.vue";
 import Loader from '~/components/Loader.vue'
-
 import {useTodoStore} from '~/store'
 import TodoItem from "~/components/TodoItem.vue";
 
@@ -95,10 +95,17 @@ const store = useTodoStore();
 }
 
 .todo_list_empty {
-  margin-top: 5.26rem;
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+
+  &__line {
+    background-color: #333;
+    height: 1px;
+    margin-bottom: 5.26rem;
+    width: 44.5rem;
+  }
 
   &__h5 {
     font-family: 'Inter', 'sans-serif';
