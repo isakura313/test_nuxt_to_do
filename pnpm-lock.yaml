@@ -3,6 +3,7 @@ lockfileVersion: 5.4
 specifiers:
   '@nuxtjs/google-fonts': ^2.0.0
   '@pinia/nuxt': ^0.4.7
+  '@vuepic/vue-datepicker': ^4.2.0
   axios: ^1.3.4
   maska: ^2.1.7
   nuxt: ^3.2.3
@@ -13,6 +14,7 @@ specifiers:
 dependencies:
   '@nuxtjs/google-fonts': 2.0.0
   '@pinia/nuxt': 0.4.7
+  '@vuepic/vue-datepicker': 4.2.0
   axios: 1.3.4
   maska: 2.1.7
   nuxt-icon: 0.3.2
@@ -1796,6 +1798,16 @@ packages:
     resolution: {integrity: sha512-BHGyyGN3Q97EZx0taMQ+OLNuZcW3d37ZEVmEAyeoA9ERdGvm9Irc/0Fua8SNyOtV1w6BS4q25wbMzJujO9HIfQ==}
     dev: true
 
+  /@vuepic/vue-datepicker/4.2.0:
+    resolution: {integrity: sha512-ipo3ZoY/zyVBXbTcnC16GvIuo/Ja/ddaN0OGVV45KMXmsXJsUFo52c17c1l17iDm7N9Ds8l4yRSGmWpDAzrbXQ==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      vue: '>=3.2.0'
+    dependencies:
+      date-fns: 2.29.3
+      date-fns-tz: 1.3.8_date-fns@2.29.3
+    dev: false
+
   /@vueuse/head/1.1.9_vue@3.2.47:
     resolution: {integrity: sha512-J6OT32x1MnFs6a90DdusFfxPZYupYGR1kItDTw06Lj6ZORJRG1Del1BEy5FFXI7mhuIM4/nGLXgW+FtLE6JJQQ==}
     peerDependencies:
@@ -2465,6 +2477,19 @@ packages:
     resolution: {integrity: sha512-0R9ikRb668HB7QDxT1vkpuUBtqc53YyAwMwGeUFKRojY/NWKvdZ+9UYtRfGmhqNbRkTSVpMbmyhXipFFv2cb/A==}
     engines: {node: '>= 12'}
     dev: true
+
+  /date-fns-tz/1.3.8_date-fns@2.29.3:
+    resolution: {integrity: sha512-qwNXUFtMHTTU6CFSFjoJ80W8Fzzp24LntbjFFBgL/faqds4e5mo9mftoRLgr3Vi1trISsg4awSpYVsOQCRnapQ==}
+    peerDependencies:
+      date-fns: '>=2.0.0'
+    dependencies:
+      date-fns: 2.29.3
+    dev: false
+
+  /date-fns/2.29.3:
+    resolution: {integrity: sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==}
+    engines: {node: '>=0.11'}
+    dev: false
 
   /debug/2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}

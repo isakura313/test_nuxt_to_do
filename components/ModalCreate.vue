@@ -30,21 +30,24 @@
                         <div class="modal_form__error_valid">{{ error_message_text }}</div>
                     </div>
                     <div class="modal_form__input_wrap">
-                        <input
-                                v-maska:[options]
-                                v-model="date_expired"
-                                type="text"
-                                placeholder="Дата окончания"
-                                class="modal_form__input"
-                        />
+                        <div class="modal_form__date_wrap">
+                            <input
+                                    v-maska:[options]
+                                    v-model="date_expired"
+                                    type="text"
+                                    placeholder="Дата окончания"
+                                    class="modal_form__input"
+                            />
+                            <CalendarIcon class="modal_form__calendar_icon" @click="toggleCalendar"/>
+                        </div>
                         <div class="modal_form__error_valid">{{ error_message_date }}</div>
                     </div>
-
                     <CreateButton
                             @click.prevent="createTodo"
                             :text="editableMode ? 'сохранить' : 'создать'"
                             style="width: 100%; background-color: #808080"
                     />
+                    <VueDatePicker v-model="date_expired" inline v-show="show_calendar"/>
                 </form>
             </div>
         </div>
@@ -53,17 +56,26 @@
 
 <script lang="ts" setup>
 import {defineEmits, watch} from "vue";
+import {zeroDateFix} from "~/helpers/zeroDateFix";
 import {vMaska} from "maska"
+import type {Ref} from 'vue'
 import CloseIcon from "~/components/icons/CloseIcon.vue";
 import CreateButton from "~/components/CreateButton.vue";
 import {useTodoStore} from "~/store";
 import {TodoInterface} from "~~/types/todoInterface";
-import is from "@sindresorhus/is";
-import date = is.date;
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
+import CalendarIcon from "~/components/icons/CalendarIcon.vue";
 
 const header = ref("");
+const date = ref();
+const show_calendar = ref(false);
+
 const text = ref("");
-let date_expired = ref(0);
+let date_expired: Ref<string> = ref(`${zeroDateFix(new Date().getDate())}
+    .${zeroDateFix(new Date().getMonth())}
+    .${new Date().getFullYear()}`);
+
 const error_message_header = ref('')
 const error_message_text = ref('')
 const error_message_date = ref('')
@@ -73,6 +85,10 @@ const date_error = ref(false);
 
 const store = useTodoStore();
 const $emits = defineEmits(["closeModal"]);
+
+function toggleCalendar() {
+    show_calendar.value = !show_calendar.value;
+}
 
 function checkHeader() {
     if (header.value.length < 4) {
@@ -89,35 +105,19 @@ const options = reactive({
     eager: true
 })
 watch(date_expired, () => {
+    console.log(date_expired);
     const arr = date_expired.value.split('.');
-    if (arr[0] > 31) {
-        arr[0] = 31
+    if (Number(arr[0]) > 31) {
+        arr[0] = '31'
     }
-    if (arr[1] > 12) {
-        arr[1] = 12
+    if (Number(arr[1]) > 12) {
+        arr[1] = '12'
     }
-    if (arr[2] > Number(new Date().getFullYear())) {
-        arr[2] = new Date().getFullYear()
+    if (Number(arr[2]) > Number(new Date().getFullYear())) {
+        arr[2] = `${new Date().getFullYear()}`
     }
     date_expired.value = arr.join('.')
 })
-
-// date_expired.value = e.target.value
-// console.log(/^\d+$/.test(e.target.value));
-// if (/^\d+$/.test(e.target.value)) {
-//     const arr = e.target.value.split(".")
-//     if (arr[0] > 31) {
-//         arr[0] = 31
-//     }
-//     if (arr[1] > 13) {
-//         arr[1] = 12
-//     }
-//     if (arr[2] > Number(new Date().getFullYear())) {
-//         arr[2] = Number(new Date().getFullYear())
-//     }
-//     date_expired.value = arr.join('.')
-// }
-// }
 
 
 function checkText() {
@@ -246,6 +246,22 @@ if (props.editableMode && store.todos.length) {
   &_form {
     display: flex;
     flex-direction: column;
+
+    &__calendar_icon {
+      margin-right: 10px;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    &__date_wrap {
+      width: 100%;
+      display: flex;
+      background-color: #262626;
+      justify-content: space-between;
+      align-items: center;
+    }
 
     &__input_wrap {
       padding-bottom: 20px;
