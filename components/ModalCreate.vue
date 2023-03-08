@@ -1,59 +1,65 @@
 <template>
+
     <Teleport to="body">
-        <div class="modal_wrapper" v-show="open">
-            <div class="modal">
-                <div class="modal__header_wrap">
-                    <h3 class="modal__h3">Создать задачу</h3>
-                    <button class="modal__close" @click="closeMe">
-                        <CloseIcon/>
-                    </button>
-                </div>
-                <form class="modal_form">
-                    <div class="modal_form__input_wrap">
-                        <input
-                                v-model="header"
-                                type="text"
-                                placeholder="Заголовок"
-                                class="modal_form__input"
-                                @blur="checkHeader"
-                        />
-                        <div class="modal_form__error_valid">{{ error_message_header }}</div>
+        <transition-scale>
+            <div class="modal_wrapper" v-show="open">
+                <div class="modal">
+                    <div class="modal__header_wrap">
+                        <h3 class="modal__h3">Создать задачу</h3>
+                        <button class="modal__close" @click="closeMe">
+                            <CloseIcon/>
+                        </button>
                     </div>
-                    <div class="modal_form__input_wrap">
-                        <input
-                                v-model="text"
-                                type="text"
-                                placeholder="Текст"
-                                class="modal_form__input"
-                                @blur="checkText"
-                        />
-                        <div class="modal_form__error_valid">{{ error_message_text }}</div>
-                    </div>
-                    <div class="modal_form__input_wrap">
-                        <div class="modal_form__date_wrap">
+                    <form class="modal_form">
+                        <div class="modal_form__input_wrap">
                             <input
-                                    v-maska:[options]
-                                    v-model="date_expired"
+                                    v-model="header"
                                     type="text"
-                                    placeholder="Дата окончания"
+                                    placeholder="Заголовок"
                                     class="modal_form__input"
+                                    @blur="checkHeader"
                             />
-                            <CalendarIcon class="modal_form__calendar_icon" @click="toggleCalendar"/>
+                            <div class="modal_form__error_valid">{{ error_message_header }}</div>
                         </div>
-                        <div class="modal_form__error_valid">{{ error_message_date }}</div>
-                    </div>
-                    <CreateButton
-                            @click.prevent="createTodo"
-                            :text="editableMode ? 'сохранить' : 'создать'"
-                            style="width: 100%;"
-                            :disabled="button_disabled"
-                    />
-                    <VueDatePicker dark @update:model-value="setDate" vertical inline
-                                   v-show="show_calendar"
-                                   style="position: absolute; bottom:0%;left: 63%;"/>
-                </form>
+                        <div class="modal_form__input_wrap">
+                            <input
+                                    v-model="text"
+                                    type="text"
+                                    placeholder="Текст"
+                                    class="modal_form__input"
+                                    @blur="checkText"
+                            />
+                            <div class="modal_form__error_valid">{{ error_message_text }}</div>
+                        </div>
+                        <div class="modal_form__input_wrap">
+                            <div class="modal_form__date_wrap">
+                                <input
+                                        v-maska:[options]
+                                        v-model="date_expired"
+                                        type="text"
+                                        placeholder="Дата окончания"
+                                        class="modal_form__input"
+                                />
+                                <CalendarIcon class="modal_form__calendar_icon" @click="toggleCalendar"/>
+                            </div>
+                            <div class="modal_form__error_valid">{{ error_message_date }}</div>
+                        </div>
+                        <CreateButton
+                                @click.prevent="createTodo"
+                                :text="editableMode ? 'сохранить' : 'создать'"
+                                style="width: 100%;"
+                                :disabled="button_disabled"
+                        />
+                        <VueDatePicker dark @update:model-value="setDate" vertical inline
+                                       v-show="show_calendar"
+                                       class="modal_form__dropdown_calendar"
+                        />
+
+                    </form>
+                </div>
             </div>
-        </div>
+        </transition-scale>
+
     </Teleport>
 </template>
 
@@ -69,6 +75,8 @@ import {TodoInterface} from "~~/types/todoInterface";
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import CalendarIcon from "~/components/icons/CalendarIcon.vue";
+import {TransitionScale} from '@morev/vue-transitions';
+
 
 const header = ref("");
 const show_calendar = ref(false);
@@ -91,7 +99,7 @@ function toggleCalendar() {
 }
 
 const button_disabled = computed(() => {
-    return !(header.value.length > 4 && text.value.length > 4 && date_expired.value.length > 9)
+    return !(header.value.length > 2 && text.value.length > 3 && date_expired.value.length > 9)
 })
 
 const setDate = (value: any) => {
@@ -125,9 +133,6 @@ watch(date_expired, () => {
     if (Number(arr[1]) > 12) {
         arr[1] = '12'
     }
-    if (Number(arr[2]) > Number(new Date().getFullYear())) {
-        arr[2] = `${new Date().getFullYear()}`
-    }
     date_expired.value = arr.join('.')
 })
 
@@ -143,7 +148,7 @@ function checkText() {
 }
 
 function createTodo() {
-    if (header.value.length < 3) {
+    if (header.value.length < 1) {
         header_error.value = true;
         return;
     }
@@ -174,6 +179,7 @@ function createTodo() {
     header.value = ''
     text.value = ''
     date_expired.value = ''
+    header_error.value = false;
     $emits("closeModal");
 }
 
@@ -245,7 +251,7 @@ if (props.editableMode && store.todos.length) {
 }
 
 .modal {
-  width: 28rem;
+  max-width: 28rem;
   margin: 14rem auto 0 auto;
   background-color: #333333;
   padding: 20px;
@@ -294,6 +300,13 @@ if (props.editableMode && store.todos.length) {
   &_form {
     display: flex;
     flex-direction: column;
+    position: relative;
+
+    &__dropdown_calendar {
+      position: absolute;
+      top: 50%;
+      left: 100%;
+    }
 
     &__calendar_icon {
       margin-right: 10px;
@@ -332,6 +345,21 @@ if (props.editableMode && store.todos.length) {
         font-weight: 400;
         font-size: 14px;
         line-height: 140%;
+      }
+    }
+  }
+}
+
+
+@media screen and (max-width: 416px) {
+  .modal {
+    width: 85%;
+
+    &_form {
+      &__dropdown_calendar {
+        position: absolute;
+        top: 68%;
+        left: 10%;
       }
     }
   }

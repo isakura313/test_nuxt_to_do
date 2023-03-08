@@ -13,8 +13,12 @@
 
 <script setup lang="ts">
 import {ref} from 'vue'
+import {useTodoStore} from '~/store';
 import CreateButton from "~/components/CreateButton.vue";
 import ModalCreate from "~/components/ModalCreate.vue";
+
+const store = useTodoStore();
+store.getTodos()
 
 const showModal = ref(false)
 </script>
@@ -23,7 +27,6 @@ const showModal = ref(false)
 <style lang="scss">
 
 .todo_list__wrapper {
-  //min-height: 90vh;
   width: 100%;
   display: flex;
   flex-direction: column;

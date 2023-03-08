@@ -1,5 +1,5 @@
 <template>
-    <svg width="19" height="20" viewBox="0 0 13 14" fill="none" xmlns="http://www.w3.org/2000/svg"
+    <svg width="14" height="15" viewBox="0 0 13 14" fill="none" xmlns="http://www.w3.org/2000/svg"
          @mouseover="iconColor='tomato'; "
          @mouseleave="iconColor='#808080';">
         <path d="M8.20214 4.98548H6.87158V10.5073H8.20214V4.98548Z" :fill="iconColor"/>

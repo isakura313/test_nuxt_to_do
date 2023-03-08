@@ -1,55 +1,59 @@
 <template>
-    <div class="todo_item">
-        <div class="todo_item__wrap">
-            <div
-                    :class="{ todo_item__icon_wrap: true, todo_icon_selected: todo.done }"
-                    @click="madeDone"
-            >
-                <IconCompleted v-if="todo.done"/>
-            </div>
-            <div class="top_wrap">
-                <NuxtLink :to="'todo/'+todo.id" style="text-decoration: none">
-                    <h5 :class="{ todo_item__title: true, strike_text: todo.done }">
-                        {{ todo.header }}
-                    </h5>
-                </NuxtLink>
-                <div style="display: flex">
-                    <div class="todo_item__wrap_dates">
-                        <div class="todo_item__dates_wrap">
-                            <span>Дата создания:</span>
-                            <span class="todo_item__date"> {{ todo.created_at}}</span>
-                        </div>
-                        <div class="todo_item__dates_wrap">
-                            <span>Дата окончания: </span>
-                            <span class="todo_item__date"> {{ todo.date_expired }}</span>
+    <transition-scale transform-origin="50% 0%">
+        <div class="todo_item">
+            <div class="todo_item__wrap">
+                <div
+                        :class="{ todo_item__icon_wrap: true, todo_icon_selected: todo.done }"
+                        @click="madeDone"
+                >
+                    <IconCompleted v-if="todo.done"/>
+                </div>
+                <div class="top_wrap">
+                    <NuxtLink :to="'todo/'+todo.id" style="text-decoration: none" class="todo_item__link">
+                        <h5 :class="{ todo_item__title: true, strike_text: todo.done }">
+                            {{ todo.header }}
+                        </h5>
+                    </NuxtLink>
+                    <div style="display: flex">
+                        <div class="todo_item__wrap_dates">
+                            <div class="todo_item__dates_wrap">
+                                <span>Дата создания:</span>
+                                <span class="todo_item__date"> {{ todo.created_at }}</span>
+                            </div>
+                            <div class="todo_item__dates_wrap">
+                                <span>Дата окончания: </span>
+                                <span class="todo_item__date"> {{ todo.date_expired }}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <div class="todo_item__wrap_icons">
+                    <EditIcon class="todo_item__icon_edit" @click="editTodo"/>
+                    <ThrashIcon class="todo_item__icon_edit" @click="deleteTodo"/>
+                </div>
+                <p :class="{ todo_item__text: true, strike_text: todo.done }">{{ todo.text }}</p>
             </div>
-            <div class="todo_item__wrap_icons">
-                <EditIcon class="todo_item__icon_edit" @click="editTodo"/>
-                <ThrashIcon class="todo_item__icon_edit" @click="deleteTodo"/>
-            </div>
-            <p :class="{ todo_item__text: true, strike_text: todo.done }">{{ todo.text }}</p>
-        </div>
 
-    </div>
+        </div>
+    </transition-scale>
     <ModalCreate
             :editableMode="true"
             :todoId="todo.id"
             :open="openModal"
             @closeModal="closeModal"
     />
+
 </template>
 
 <script lang="ts" setup>
+import {TransitionScale} from '@morev/vue-transitions';
+
 import IconCompleted from "./icons/IconСompleted.vue";
 import EditIcon from "~/components/icons/EditIcon.vue";
 import ThrashIcon from "~/components/icons/ThrashIcon.vue";
 import ModalCreate from "./ModalCreate.vue";
 import {TodoInterface} from "~/types/todoInterface";
 import {useTodoStore} from "~/store";
-import filterDate from "~/helpers/formatDate";
 
 const activeIconClass = ref("todo_icon_unselected");
 const openModal = ref(false);
@@ -81,9 +85,20 @@ function deleteTodo() {
 </script>
 
 <style lang="scss">
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+
 .top_wrap {
   display: flex;
   justify-content: space-between;
+
 }
 
 .strike_text {
@@ -91,9 +106,11 @@ function deleteTodo() {
 }
 
 .todo_item {
-  border: 1px solid #333333;
   margin-bottom: 12px;
   padding: 16px 19px;
+  border: 1px solid #333333;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
 
   &__wrap {
     display: grid;
@@ -160,6 +177,44 @@ function deleteTodo() {
   &__icon_edit {
     &:hover {
       cursor: pointer;
+    }
+  }
+}
+
+@media screen and (max-width: 416px) {
+  .todo_item {
+    border: 1px solid #333333;
+    margin-bottom: 12px;
+    padding: 16px 19px;
+
+    &__wrap {
+      display: grid;
+      grid-template-columns: 10% 70%;
+      grid-template-rows: 1fr;
+      align-items: center;
+    }
+
+    .top_wrap {
+      display: grid;
+      grid-template-columns: 60%  40% 10%;
+      grid-gap: 10px;
+      align-items: center;
+    }
+
+    &__link {
+      display: flex;
+      align-items: center;
+    }
+
+    &__dates_wrap {
+      flex-direction: column;
+    }
+
+    &__wrap_icons {
+      flex-direction: column;
+      justify-content: space-around;
+      height: 100%;
+      align-items: center;
     }
   }
 }

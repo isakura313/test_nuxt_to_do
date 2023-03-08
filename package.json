@@ -11,14 +11,12 @@
     "nuxt": "^3.2.3"
   },
   "dependencies": {
-    "@nuxtjs/google-fonts": "^2.0.0",
+    "@morev/vue-transitions": "^2.3.6",
     "@pinia/nuxt": "^0.4.7",
     "@vuepic/vue-datepicker": "^4.2.0",
     "axios": "^1.3.4",
     "maska": "^2.1.7",
-    "nuxt-icon": "^0.3.2",
-    "sass": "^1.58.3",
-    "vue-date-pick": "^1.5.1"
+    "sass": "^1.58.3"
   },
   "overrides": {
     "vue": "latest"

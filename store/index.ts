@@ -9,32 +9,27 @@ export const useTodoStore = defineStore("todo", {
             return {todos: [], error: false, showModal: false, loadingTodo: false} as RootState;
         },
         getters: {
-            doneTodos: (state) => {
+            doneTodos: (state): number => {
                 return state.todos.filter((item) => item.done == true).length
             }
         },
         actions: {
             getTodos() {
-                axios({
-                    method: "GET",
-                    url: url,
-                }).then((res: any) => {
-                    this.loadingTodo = true;
-                    this.todos = res.data;
-                });
+                axios.get<TodoInterface[]>(url)
+                    .then((res) => {
+                        this.loadingTodo = true;
+                        this.todos = res.data;
+                    });
             },
             addTodos(todo: TodoInterface): void {
-                axios({
-                    method: "POST",
-                    url: url,
-                    data: {
+                axios.post<TodoInterface>(url,
+                    {
                         header: todo.header,
                         text: todo.text,
                         done: todo.done,
                         created_at: todo.created_at,
                         date_expired: todo.date_expired,
-                    },
-                })
+                    })
                     .then((res) => {
                         this.todos.push(res.data);
                     })
@@ -43,39 +38,31 @@ export const useTodoStore = defineStore("todo", {
                     });
             },
             editTodo(todo: any) {
-                axios({
-                    method: "PATCH",
-                    url: `${url}/${todo.id}`,
-                    data: {
+                axios.patch<TodoInterface>(`${url}/${todo.id}`,
+                    {
                         ...todo
-                    },
-                }).then((res: any) => {
-                    this.todos = this.todos.map((item) => {
-                        if (item.id === todo.id) {
-                            item = res.data;
-                            return item
-                        }
-                        return item
                     })
-                });
+                    .then((res) => {
+                        this.todos = this.todos.map((item) => {
+                            if (item.id === todo.id) {
+                                return res.data;
+                            }
+                            return item
+                        })
+                    });
             },
             toggleDone(todo: TodoInterface) {
-                axios({
-                    method: "PATCH",
-                    url: `${url}/${todo.id}`,
-                    data: {
+                axios.patch<TodoInterface>(`${url}/${todo.id}`,
+                    {
                         done: !todo.done,
-                    },
-                }).then((res: any) => {
+                    }).then((res) => {
                     const el = this.todos.filter((item) => item.id == todo.id)[0];
                     el.done = !el.done;
                 });
             },
-            deleteTodos(id: string): void {
-                axios({
-                    method: "DELETE",
-                    url: `${url}/${id}`,
-                }).then((res) => {
+            deleteTodos<TodoInterface>(id: string): void {
+                axios.delete(`${url}/${id}`,
+                ).then((res) => {
                     this.todos = this.todos.filter((item) => item.id !== id);
                 });
             },

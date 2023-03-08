@@ -125,4 +125,15 @@ const store = useTodoStore();
     color: #808080;
   }
 }
+
+@media screen and (max-width: 416px) {
+  .todo_list_top_header {
+    width: 95%;
+  }
+  .todo_list_empty {
+    &__line {
+      width: 100%;
+    }
+  }
+}
 </style>
