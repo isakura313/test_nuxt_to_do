@@ -1,52 +1,51 @@
 <template>
-    <transition-scale transform-origin="50% 0%">
-        <div class="todo_item">
-            <div class="todo_item__wrap">
-                <div
-                        :class="{ todo_item__icon_wrap: true, todo_icon_selected: todo.done }"
-                        @click="madeDone"
-                >
-                    <IconCompleted v-if="todo.done"/>
-                </div>
-                <div class="top_wrap">
-                    <NuxtLink :to="'todo/'+todo.id" style="text-decoration: none" class="todo_item__link">
-                        <h5 :class="{ todo_item__title: true, strike_text: todo.done }">
-                            {{ todo.header }}
-                        </h5>
-                    </NuxtLink>
-                    <div style="display: flex">
-                        <div class="todo_item__wrap_dates">
-                            <div class="todo_item__dates_wrap">
-                                <span>Дата создания:</span>
-                                <span class="todo_item__date"> {{ todo.created_at }}</span>
-                            </div>
-                            <div class="todo_item__dates_wrap">
-                                <span>Дата окончания: </span>
-                                <span class="todo_item__date"> {{ todo.date_expired }}</span>
-                            </div>
+
+    <div class="todo_item">
+        <div class="todo_item__wrap">
+            <div
+                    :class="{ todo_item__icon_wrap: true, todo_icon_selected: todo.done }"
+                    @click="madeDone"
+            >
+                <IconCompleted v-if="todo.done"/>
+            </div>
+            <div class="top_wrap">
+                <NuxtLink :to="'todo/'+todo.id" style="text-decoration: none" class="todo_item__link">
+                    <h5 :class="{ todo_item__title: true, strike_text: todo.done }">
+                        {{ todo.header }}
+                    </h5>
+                </NuxtLink>
+                <div style="display: flex">
+                    <div class="todo_item__wrap_dates">
+                        <div class="todo_item__dates_wrap">
+                            <span>Дата создания:</span>
+                            <span class="todo_item__date"> {{ todo.created_at }}</span>
+                        </div>
+                        <div class="todo_item__dates_wrap">
+                            <span>Дата окончания: </span>
+                            <span class="todo_item__date"> {{ todo.date_expired }}</span>
                         </div>
                     </div>
                 </div>
-                <div class="todo_item__wrap_icons">
-                    <EditIcon class="todo_item__icon_edit" @click="editTodo"/>
-                    <ThrashIcon class="todo_item__icon_edit" @click="deleteTodo"/>
-                </div>
-                <p :class="{ todo_item__text: true, strike_text: todo.done }">{{ todo.text }}</p>
             </div>
-
+            <div class="todo_item__wrap_icons">
+                <EditIcon class="todo_item__icon_edit" @click="editTodo"/>
+                <ThrashIcon class="todo_item__icon_edit" @click="deleteTodo"/>
+            </div>
+            <p :class="{ todo_item__text: true, strike_text: todo.done }">{{ todo.text }}</p>
         </div>
-    </transition-scale>
+
+    </div>
     <ModalCreate
             :editableMode="true"
             :todoId="todo.id"
             :open="openModal"
             @closeModal="closeModal"
     />
-
 </template>
 
 <script lang="ts" setup>
 import {TransitionScale} from '@morev/vue-transitions';
+import {TransitionRoot} from '@headlessui/vue'
 
 import IconCompleted from "./icons/IconСompleted.vue";
 import EditIcon from "~/components/icons/EditIcon.vue";

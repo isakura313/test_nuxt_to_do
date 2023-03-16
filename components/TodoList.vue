@@ -18,10 +18,20 @@
             </span>
         </div>
     </div>
-
-    <div class="todo_list_wrapper" v-if="store.todos.length">
+    <TransitionRoot
+            appear
+            :show="store.todos.length"
+            as="div"
+            class="todo_list_wrapper"
+            enter="transition-opacity duration-250"
+            enter-from="opacity-0"
+            enter-to="opacity-100"
+            leave="transition-opacity duration-150"
+            leave-from="opacity-100"
+            leave-to="opacity-0"
+    >
         <TodoItem v-for="todo in store.todos" :todo="todo" :key="todo.id"/>
-    </div>
+    </TransitionRoot>
     <div class="todo_list_empty" v-else-if="store.todos.length === 0 && store.loadingTodo ">
         <div class="todo_list_empty__line">
         </div>
@@ -37,6 +47,7 @@ import Clipboard from "~/components/icons/Clipboard.vue";
 import Loader from '~/components/Loader.vue'
 import {useTodoStore} from '~/store'
 import TodoItem from "~/components/TodoItem.vue";
+import {TransitionRoot} from "@headlessui/vue";
 
 const store = useTodoStore();
 </script>

@@ -14,9 +14,10 @@
     "@morev/vue-transitions": "^2.3.6",
     "@pinia/nuxt": "^0.4.7",
     "@vuepic/vue-datepicker": "^4.2.0",
-    "axios": "^1.3.4",
+    "axios": "1.2.0",
     "maska": "^2.1.7",
-    "sass": "^1.58.3"
+    "nuxt-headlessui": "^1.1.1",
+    "sass": "^1.59.2"
   },
   "overrides": {
     "vue": "latest"

@@ -3,7 +3,7 @@ import {TodoInterface} from "~/types/todoInterface";
 import {RootState} from "~/types/RootState";
 import axios from "axios";
 
-const url = "/api/deals";
+const url = "https://64037721302b5d671c502ee9.mockapi.io/api/deals";
 export const useTodoStore = defineStore("todo", {
         state: () => {
             return {todos: [], error: false, showModal: false, loadingTodo: false} as RootState;
